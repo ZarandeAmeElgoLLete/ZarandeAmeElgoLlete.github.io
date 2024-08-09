@@ -45,6 +45,10 @@ body {
     clip-path: polygon(25% 0, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
     margin-right: calc(var(--negativeMargin) + var(--marginBoxes));
     margin-bottom: var(--marginBoxes);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   } 
 
   @media screen and (min-width: 1100px){
