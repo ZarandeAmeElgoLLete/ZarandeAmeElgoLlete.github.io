@@ -1,8 +1,13 @@
-const body = document.getElementById("");
+const hexs = [...document.getElementsByClassName("test")];
+const users = [];
 
-const makePost = () => {
-    const screenWidth = screen.width;
-    const postInRow = Math.floor(screenWidth/200)
+for (let i = 0; i < hexs.length; i++) {
+    users.push({
+        numUser: i + 1,
+        id: Math.floor(Math.random()*100 + 1)
+    })
 }
 
-console.log(screen.width);
+users.forEach((user, i) => {
+    hexs[i].innerText = `usuario: ${user.numUser}, id: ${user.id}`;
+});
