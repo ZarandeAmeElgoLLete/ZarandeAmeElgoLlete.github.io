@@ -1,5 +1,24 @@
 :root {
-  --gap: 5px;
+  /*Cantidad de hexagonos, varia segun el ancho de la pagina, ver abajo*/
+  --quantityOfHex: 0;
+  /*Ancho de pagina, utilizo % porque vw toma todo el ancho de la pantalla, incluido la barra desplzadora*/
+  --screenWidth: 100%;
+  /*Proporcion del hexagono en vw => anchoDePagina / (0.75 * cantidadDeHex + 0.25)*/
+  --hexProportion: calc(var(--screenWidth) / (var(--quantityOfHex) * 0.75 + 0.25));
+  /*Margen entre hexagonos*/
+  --marginBoxes: 5px;
+  /*Margen de la pagina*/
+  --marginPage: 5%;
+  /*Ancho final de hexagonos, restado el margen de la pagina y el margen entre hexagonos, multiplicado la relacion de (cantidadDe0Hex - 1) / (cantidadDeHex), esto debido a que el margen del ultimo Hex no cuenta*/
+  --finalHexWidth: calc(var(--hexProportion) - var(--marginBoxes) * (var(--quantityOfHex) - 1) / var(--quantityOfHex));
+  /*Relacion entre ancho y altura, aproximacion de (sqrt(3) / 2) */
+  --aspectRatio: 0.87;
+  /*Calculo de altura, calculado misma forma que ancho, multiplicado por la relacion de aspecto, esta vez utilizando vw, ya que % toma la altura*/
+  --hexHeight: calc((((100vw / (var(--quantityOfHex) * 0.75 + 0.25)) - var(--marginBoxes)) * var(--aspectRatio))*0.95);
+  /*Margen negativo, para que los hexagonos se ajusten y se toquen, es igual al ancho sobre 4*/
+  --negativeMargin: calc(var(--hexProportion)/-4);
+  /*Desplaza el hexagono hacia abajo para que ocupe su lugar correspondiende, ademas, lo empuja un poco mas abajo, para que coincidan los margenes*/
+  --moveHexDown: calc(var(--hexHeight)*0.5 + var(--marginBoxes) / 2)
 }
 
 * {
@@ -14,88 +33,92 @@ body {
 }
 
 .div-container {
-  width: 100%;
-  display: grid;
-  gap: var(--gap);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-left: 0;
+  width: 95%;
+  margin: 2.5% auto;
+  padding-bottom: calc(var(--hexHeight)/2);
 }
 
 
 .test {
-  width: 100%;
-  aspect-ratio: calc(1/0.87);
-  background-color: rgb(255, 201, 14);
-  clip-path: polygon(25% 0, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-}
+    width: var(--finalHexWidth);
+    aspect-ratio: 1.16;
+    background-color: rgb(255, 201, 14);
+    clip-path: polygon(25% 0, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    margin-right: calc(var(--negativeMargin) + var(--marginBoxes));
+    margin-bottom: var(--marginBoxes);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-@media screen and (min-width: 1200px){
-  .test:nth-child(6n - 4), .test:nth-child(6n - 2) {
-    width: 200%;
-    position: relative;
-    top: calc(50% + var(--gap)/2);
-    left: -50%;
+  @media screen and (min-width: 1100px){
+    :root {
+      --quantityOfHex: 8;
+    }
+    .test:nth-child(2n) {
+      position: relative;
+      top: var(--moveHexDown);
+      background-color: red;
+    }
   }
-  .test:nth-child(6n) {
-    width: 100%;
-    position: relative;
-    top: 133.33%;
-    left: -33.33%;
-  }
-  .div-container {
-    grid-template-columns: repeat(2, 1fr 0.5fr) 1 0.75;
-  }
-}
 
-@media screen and (min-width: 1000px) and (max-width: 1200px){
-  .test:nth-child(5n-3), .test:nth-child(5n-1) {
-    width: 200%;
-    position: relative;
-    top: calc(50% + var(--gap)/2);
-    left: -50%;
+@media screen and (min-width: 850px) and (max-width: 1100px){
+  :root {
+    --quantityOfHex: 6;
   }
-  .div-container {
-    grid-template-columns: repeat(2, 1fr 0.5fr) 1fr;
-  }
-}
-
-@media screen and (min-width: 800px) and (max-width: 1000px){
-  .test:nth-child(4n - 2) {
-    width: 200%;
-    position: relative;
-    top: calc(50% + var(--gap)/2);
-    left: -50%;
-  }
-  .div-container {
-    width: 100%;
-    grid-template-columns: repeat(1, 1fr 0.5fr) 1fr 0.75fr;
-  }
-  .test:nth-child(4n) {
-    position: relative;
-    top: calc(50% + var(--gap)/2);
-    width: 133.33%;
-    left: -33.33%;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 800px){
-  .test:nth-child(3n-1) {
-    width: 200%;
-    position: relative;
-    top: calc(50% + var(--gap)/2);
-    left: -50%;
-  }
-  .div-container {
-    grid-template-columns: repeat(1, 1fr 0.5fr) 1fr;
-  }
-}
-
-@media screen and (max-width: 600px){
   .test:nth-child(2n) {
-    width: 200%;
     position: relative;
-    top: calc(50% + var(--gap)/2);
-    left: -50%;
+    top: var(--moveHexDown);
+    background-color: red;
   }
-  .div-container {
-    grid-template-columns: repeat(1, 1fr 0.5fr);
+}
+
+@media screen and (min-width: 750px) and (max-width: 850px){
+  :root {
+    --quantityOfHex: 5;
+  }
+  .test:nth-child(5n-3), .test:nth-child(5n-1) {
+    position: relative;
+    top: var(--moveHexDown);
+    background-color: red;
+  }
+}
+
+@media screen and (min-width: 650px) and (max-width: 750px){
+  :root {
+    --quantityOfHex: 4;
+  }
+  .test:nth-child(2n) {
+    position: relative;
+    top: var(--moveHexDown);
+    background-color: red;
+  }
+}
+
+@media screen and (min-width: 450px) and (max-width: 650px){
+  :root {
+    --quantityOfHex: 3;
+  }
+  .test:nth-child(3n-1) {
+    position: relative;
+    top: var(--moveHexDown);
+    background-color: red;
+  }
+}
+
+@media screen and (max-width: 450px){
+  :root {
+    --quantityOfHex: 2;
+  }
+  .test:nth-child(2n) {
+    position: relative;
+    top: var(--moveHexDown);
+    background-color: red;
   }
 }
